@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "my-app.fullname" . }}-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "my-app.fullname" . }}-api
+  template:
+    metadata:
+      labels:
+        app: {{ include "my-app.fullname" . }}-api
+    spec:
+      containers:
+        - name: api
+          image: my-python-app:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: POSTGRES_DB
+              value: mydb
+            - name: POSTGRES_USER
+              value: myuser
+            - name: POSTGRES_PASSWORD
+              value: mypassword
+            - name: POSTGRES_HOST
+              value: "{{ include \"my-app.fullname\" . }}-postgres"
